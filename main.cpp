@@ -2,12 +2,8 @@
 #include <iostream>
 #include <functional>
 
-BIND::placeholder<0> __1;
-BIND::placeholder<1> __2;
-BIND::placeholder<2> __3;
-BIND::placeholder<3> __4;
-
 using namespace std::placeholders;
+using namespace BIND;
 
 int sum(int a, int b) {
 	return a + b;
@@ -46,6 +42,7 @@ void test3() {
 }
 
 void test4() {
+
 	auto x = std::bind(sum, _1, _2);
 	auto y = std::bind(sum, _2, _2);
 	auto z = std::bind(sum, x, y);
@@ -55,7 +52,10 @@ void test4() {
 	auto zz = BIND::bind(sum, xx, yy);
 
 	EXPECT_TRUE(zz(13, 14) == z(13, 14));
-	
+}
+
+void add(int& lhs, int rhs) {
+	lhs += rhs;
 }
 
 int main() {
@@ -65,6 +65,12 @@ int main() {
 	test2();
 	test3();
 	test4();
+
+	auto x = BIND::bind(add, BIND::__1, 5);
+	int val = 15;
+	x(val);
+	std::cout << val << "\n";
+
 	std::cout << "ALL DONE, CONGRATS!\n";
 	return 0;
 }

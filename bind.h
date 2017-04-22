@@ -15,7 +15,7 @@ namespace BIND {
 
 		template <typename... NewArgs>
 		auto operator() (NewArgs&&... newArgs) {
-			return invoker(typename build_inds<std::tuple_size< std::tuple<Args...>  >::value>::type(), std::forward<NewArgs>(newArgs)...);
+			return invoker(typename build_inds<std::tuple_size< std::tuple<Args...> >::value>::type(), std::forward<NewArgs>(newArgs)...);
 		}
 	
 		my_bind(Func&& func, Args &&... args) 
@@ -50,7 +50,7 @@ namespace BIND {
 		}
 
 		template <std::size_t Index, typename... NewArgs>
-		auto&& subs(placeholder<Index>, NewArgs... newArgs) {
+		auto&& subs(placeholder<Index>, NewArgs&&... newArgs) {
 			return std::get<Index>(std::forward_as_tuple(newArgs...));
 		}
 
@@ -69,5 +69,9 @@ namespace BIND {
 		return my_bind<Func, Args...> (std::forward<Func>(func), std::forward<Args>(args)...);
 	}
 
+	constexpr placeholder<0> __1;
+	constexpr placeholder<1> __2;
+	constexpr placeholder<2> __3;
+	constexpr placeholder<3> __4;
 }
 #endif
